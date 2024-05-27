@@ -8,7 +8,7 @@
 <body>
     <div>
         <div>
-        <select id="voices">
+        <select id="voices" onchange="saveVoice()">
             <option value="">Select on voice</option>
         </select>
         </div>    
@@ -38,9 +38,14 @@
             })
         }
         else{
+            voiceSaved = localStorage.getItem("voice");
+        
             var select = document.getElementById("voices");
             voices.forEach((voice) => {
                 var option = document.createElement("option");
+                if (voiceSaved === voice.name) {
+                    option.selected = true;
+                }
                 option.value = voice.name;
                 option.text = voice.name + " (" + voice.lang + ")";
                 select.appendChild(option);
@@ -60,6 +65,12 @@ function speak(){
     to_speak.voice = voice;
     window.speechSynthesis.speak(to_speak);
 }
+
+function saveVoice(){
+    var voice = document.getElementById("voices").value;
+    localStorage.setItem("voice", voice);
+}
+
 getVoices();
 </script>
 
