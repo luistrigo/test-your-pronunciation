@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <div>
+        <select id="voices">
+            <option value="">Select on voice</option>
+        </select>
+        </div>    
+        <div>
+            <textarea name="text" id="text" cols="30" rows="10"></textarea>
+        </div>
+        <div>
+            <button onclick="speak()">Speak</button>
+        </div>
+    </div>
+</body>
+<script>
+    var voices = [];
+    function getVoices(){
+        var resolvePromise;
+        var promise = new Promise(r => resolvePromise = r);
+        voices = window.speechSynthesis.getVoices();
+        if (voices.length == 0) {
+            new Promise(r => {
+                window.speechSynthesis.onvoiceschanged = () => { 
+                    window.speechSynthesis.onvoiceschanged = null;
+                    r(); 
+                };
+            })
+            .then((voices) => {
+                getVoices()
+            })
+        }
+        else{
+            var select = document.getElementById("voices");
+            voices.forEach((voice) => {
+                var option = document.createElement("option");
+                option.value = voice.name;
+                option.text = voice.name + " (" + voice.lang + ")";
+                select.appendChild(option);
+            });
+    }
+}
+
+function speak(){
+    var text = document.getElementById("text").value;
+    //get de voice selected
+    voice = voices.filter(voice => voice.name === document.getElementById("voices").value)[0];
+   if (voice == null) {
+        alert("Please select a voice.");
+        return;
+    }
+    var to_speak = new SpeechSynthesisUtterance(text);
+    to_speak.voice = voice;
+    window.speechSynthesis.speak(to_speak);
+}
+getVoices();
+</script>
+
+</html>
