@@ -72,6 +72,7 @@
 }
 
 function speak(){
+    window.speechSynthesis.cancel();
     var text = document.getElementById("text").value;
     //get de voice selected
     voice = voices.filter(voice => voice.name === document.getElementById("voices").value)[0];
@@ -86,6 +87,15 @@ function speak(){
     var to_speak = new SpeechSynthesisUtterance(text);
     to_speak.voice = voice;
     window.speechSynthesis.speak(to_speak);
+    let r = setInterval(() => {
+        console.log(speechSynthesis.speaking);
+        if (!speechSynthesis.speaking) {
+            clearInterval(r);
+        } else {
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
+        }
+    }, 14000);
 }
 
 function saveVoice(){
