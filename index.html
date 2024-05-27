@@ -10,20 +10,32 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
+>
     <title>Test your pronunciation</title>
 </head>
 <body>
-    <div>
-        <div>
-        <select id="voices" onchange="saveVoice()">
-            <option value="">Select on voice</option>
-        </select>
-        </div>    
-        <div>
-            <textarea name="text" id="text" cols="30" rows="10"></textarea>
-        </div>
-        <div>
-            <button onclick="speak()">Speak</button>
+    <div class="container mt-6">
+        <div class="rows is-centered">
+            <div class="row is-full has-text-centered mb-3">
+                <h1 class="title">Test your pronunciation</h1>
+            </div>
+            <div class="row is-full has-text-centered">
+                <div class="select is-primary">
+                    <select id="voices" onchange="saveVoice()">
+                        <option value="">Select on voice</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row is-three-fifths has-text-centered p-6">
+                <textarea class="textarea" name="text" id="text" cols="30" rows="10" placeholder="Insert your text to speak"></textarea>
+            </div>
+
+            <div class="row is-full has-text-centered mt-4">
+                <button class="button is-primary" onclick="speak()">Speak</button>
+            </div>
         </div>
     </div>
 </body>
@@ -65,6 +77,10 @@ function speak(){
     voice = voices.filter(voice => voice.name === document.getElementById("voices").value)[0];
    if (voice == null) {
         alert("Please select a voice.");
+        return;
+    }
+    if(text == ""){
+        alert("Please insert a text to speak.");
         return;
     }
     var to_speak = new SpeechSynthesisUtterance(text);
